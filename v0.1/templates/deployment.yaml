@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "lightstep.fullname" . }}
+  labels:
+    {{ include "lightstep.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "lightstep.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "lightstep.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "lightstep.serviceAccountName" . }}
+      securityContext:
+{{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: rancher-test
+        image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+          {{- if .Values.lightstep.satelliteSecret }}
+          - name: COLLECTOR_SATELLITE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: {{ .Values.lightstep.satelliteSecretKey }}
+                name: {{ .Values.lightstep.satelliteSecret }}
+          {{- end }}
+          {{- if .Values.lightstep.satelliteKey }}
+          - name: COLLECTOR_SATELLITE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: satelliteKey
+                name: lightstep-satellite
+          {{- end }}
+          - name: COLLECTOR_POOL
+            value: {{ .Values.lightstep.collector_pool | quote }}
+          - name: COLLECTOR_REPORTER_BYTES_PER_PROJECT
+            value: {{ .Values.lightstep.bytes_per_project | quote }}
+          - name: COLLECTOR_DIAGNOSTIC_PORT
+            value: {{ .Values.lightstep.diagnostic_port | quote }}
+          - name: COLLECTOR_ADMIN_PLAIN_PORT
+            value: {{ .Values.lightstep.admin_plain_port | quote }}
+          - name: COLLECTOR_HTTP_PLAIN_PORT
+            value: {{ .Values.lightstep.http_plain_port | quote }}
+          - name: COLLECTOR_GRPC_PLAIN_PORT
+            value: {{ .Values.lightstep.grpc_plain_port | quote }}
+        ports:
+        - containerPort: {{ .Values.lightstep.diagnostic_port }}
+          name: diagnostics
+          protocol: TCP
+        - containerPort: {{ .Values.lightstep.admin_plain_port }}
+          name: admin
+          protocol: TCP
+        - containerPort: {{ .Values.lightstep.http_plain_port }}
+          name: http
+          protocol: TCP
+        - containerPort: {{ .Values.lightstep.grpc_plain_port }}
+          name: grpc-insecure
+          protocol: TCP
+        resources:
+{{- toYaml .Values.resources | nindent 10 }}
+        readinessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /_ready
+              port: admin
+              scheme: HTTP
+            timeoutSeconds: 1
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /_live
+            port: admin
+            scheme: HTTP
+          timeoutSeconds: 1
+          initialDelaySeconds: 60
+          periodSeconds: 5
+          successThreshold: 1
+    {{- with .Values.nodeSelector }}
+    nodeSelector:
+{{- toYaml . | nindent 8 }}
+    {{ end }}
+  {{- with .Values.affinity }}
+    affinity:
+{{- toYaml . | nindent 8 }}
+  {{ end }}
+  {{- with .Values.tolerations }}
+    tolerations:
+{{- toYaml . | nindent 8 }}
+  {{ end }}

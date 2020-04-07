@@ -1,0 +1,5 @@
+name: Lightstep
+description: |
+  Lightsep satellite to collect telemetry data.
+version: 2020-03-03
+category: Monitoring
