@@ -79,7 +79,7 @@ questions:
   show_if: "lighstep.satelliteKey="
 - variable: lighstep.satelliteSecretKey
   default: ""
-  description: "If set, use an existing secret that contains your satellite key. The secret key must be called 'satelliteKey'"
+  description: "List the key of the secret that contains the satellite API key. Only required if you are using an existing secret for your satellite key."
   type: string
   label: Enter the name of the key that contains the satellite API key.
   group: "Satellite Configuration"

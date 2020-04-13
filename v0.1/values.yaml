@@ -59,6 +59,7 @@ ingress:
 lightstep:
   #Input your Satellite API Key
   satelliteKey: ""
+  
   #If you're using an existing secret, enter the name and key of the secret that stores your satellite API key.  Your existing secret should match this pattern, 
   # $ kubectl describe secret collector_satellite_key_secret_name
   # Name:         collector_satellite_key_secret_name
@@ -71,8 +72,8 @@ lightstep:
   # Data
   # ====
   # collector_satellite_key_secret_key:  390 bytes
-  collector_satellite_key_secret_name: "helmet"
-  collector_satellite_key_secret_key: "satelliteKey"
+  collector_satellite_key_secret_name: ""
+  collector_satellite_key_secret_key: ""
   collector_pool: rancher-satellite-pool
   bytes_per_project: "1000000000"
   bytes_per_project_override:
