@@ -64,21 +64,22 @@ questions:
 # Satellite Configuration
 - variable: lighstep.satelliteKey
   default: ""
-  description: "Enter your Lighstep satellite key."
+  description: "Enter your Lighstep satellite key. You may input your satellite key directly here, or use a reference to an existing secret"
   type: string
   label: Lightstep satellite key
+  show_if: "lighstep.satelliteSecretKey="
   group: "Satellite Configuration"
   required: true
 - variable: lighstep.satelliteSecret
   default: ""
-  description: "If set, use an existing secret that contains your satellite API key."
+  description: "If set, use an existing secret that contains your satellite API key. This must be provided, unless you provided your plain satellite key."
   type: secret
   label: Select existing secret with satellite API key
   group: "Satellite Configuration"
   show_if: "lighstep.satelliteKey="
 - variable: lighstep.satelliteSecretKey
   default: ""
-  description: "If set, use an existing secret that contains your satellite key.  The secret key must be called 'satelliteKey'"
+  description: "If set, use an existing secret that contains your satellite key. The secret key must be called 'satelliteKey'"
   type: string
   label: Enter the name of the key that contains the satellite API key.
   group: "Satellite Configuration"
