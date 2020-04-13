@@ -2,41 +2,41 @@ categories:
 - Monitoring
 questions:
 # server configurations
-- variable: server.ingress.enabled
-  default: false
-  description: "Expose the Lightstep satellite using Layer 7 Load Balancer - ingress"
-  type: boolean
-  group: "Lightstep satellite"
-  label: Expose the Lightstep satellite using Layer 7 Load Balancer
-  show_subquestion_if: true
-  required: true
-  subquestions:
-  - variable: server.ingress.hosts[0]
-    default: "satellite-host"
-    description: "Satellite server ingress hostname"
-    type: hostname
-    required: true
-    label: Hostname
-- variable: server.service.type
-  default: "NodePort"
-  description: "Server service type"
-  group: "Lightstep satellite"
-  type: enum
-  options:
-    - "ClusterIP"
-    - "NodePort"
-  required: true
-  label: Lightstep Service Type
-  show_subquestion_if: "NodePort"
-  subquestions:
-  - variable: server.service.nodePort
-    default: ""
-    description: "NodePort http port(to set explicitly, choose port between 30000-32767)"
-    type: int
-    min: 30000
-    max: 32767
-    label: Lightstep NodePort Http Port
-    show_if: "server.ingress.enabled=false&&server.service.type=NodePort"
+# - variable: server.ingress.enabled
+#   default: false
+#   description: "Expose the Lightstep satellite using Layer 7 Load Balancer - ingress"
+#   type: boolean
+#   group: "Lightstep satellite"
+#   label: Expose the Lightstep satellite using Layer 7 Load Balancer
+#   show_subquestion_if: true
+#   required: true
+#   subquestions:
+#   - variable: server.ingress.hosts[0]
+#     default: "satellite-host"
+#     description: "Satellite server ingress hostname"
+#     type: hostname
+#     required: true
+#     label: Hostname
+# - variable: server.service.type
+#   default: "NodePort"
+#   description: "Server service type"
+#   group: "Lightstep satellite"
+#   type: enum
+#   options:
+#     - "ClusterIP"
+#     - "NodePort"
+#   required: true
+#   label: Lightstep Service Type
+#   show_subquestion_if: "NodePort"
+#   subquestions:
+#   - variable: server.service.nodePort
+#     default: ""
+#     description: "NodePort http port(to set explicitly, choose port between 30000-32767)"
+#     type: int
+#     min: 30000
+#     max: 32767
+#     label: Lightstep NodePort Http Port
+#     show_if: "server.ingress.enabled=false&&server.service.type=NodePort"
 - variable: server.persistentVolume.enabled
   default: false
   description: "If true, Lightstep will create a persistent volume claim"
@@ -69,7 +69,6 @@ questions:
   label: Lightstep satellite key
   group: "Satellite Configuration"
   required: true
-  show_if: "lightstep.satelliteSecret="
 - variable: lighstep.satelliteSecret
   default: ""
   description: "If set, use an existing secret that contains your satellite API key."
