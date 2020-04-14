@@ -65,7 +65,7 @@ questions:
 # Satellite Configuration
 - variable: lighstep.satelliteKey
   default: ""
-  description: "Enter your Lighstep satellite key. You may input your satellite key directly here, or use a reference to an existing secret"
+  description: "Enter your Lighstep satellite key. You may input your satellite key directly here, or use a reference to an existing secret. If you need to create a satelite key, please refer to this page: https://docs.lightstep.com/docs/create-and-manage-satellite-keys"
   type: string
   label: Lightstep satellite key
   show_if: "lighstep.satelliteSecretKey="
